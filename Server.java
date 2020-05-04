@@ -2,12 +2,17 @@ package server;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.io.Reader;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Observable;
 import java.util.Observer;
+
+import com.google.gson.Gson;
 
 /*
  * Author: Vallath Nandakumar and the EE 422C instructors.
@@ -20,7 +25,8 @@ import java.util.Observer;
 public class Server extends Observable {
 
     static Server server;
-
+    private Item[] auctions;
+    
     public static void main (String [] args) {
         server = new Server();
         server.populateItems();
@@ -28,15 +34,20 @@ public class Server extends Observable {
     }
 
     private void populateItems() {
-		// TODO Auto-generated method stub
-		
+    	Gson gson = new Gson();
+    	try {
+			Reader reader = new FileReader("C:\\Users\\tburf\\eclipse-workspace\\Server\\src\\server\\auctions.json");
+			auctions = gson.fromJson(reader, Item[].class);
+			System.out.println(auctions);
+		} catch (FileNotFoundException e) {
+			System.out.println("File not found! D:");
+		}
 	}
 
 	private void SetupNetworking() {
-        int port = 6969;
         try {
         	System.out.println("Server Started");
-            ServerSocket ss = new ServerSocket(port);
+            ServerSocket ss = new ServerSocket(6969);
             while (true) {
                 Socket clientSocket = ss.accept();
                 ClientObserver writer = new ClientObserver(clientSocket.getOutputStream());
@@ -63,9 +74,9 @@ public class Server extends Observable {
 				DataInputStream inputFromClient = new DataInputStream(clientSocket.getInputStream());
 				DataOutputStream outputToClient = new DataOutputStream(clientSocket.getOutputStream());
 				while(true) {
-					String message = inputFromClient.readUTF();
-					System.out.println("message recieved");
-					outputToClient.writeUTF("Message recieved");
+					String message = "placeholder";
+					//System.out.println("message recieved: " + message);
+					//outputToClient.writeUTF("Message recieved: " + message);
 				}
 			} catch (IOException e) {
 				e.printStackTrace();

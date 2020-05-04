@@ -14,8 +14,17 @@ public class ClientObserver extends ObjectOutputStream implements Observer{
 	}
 
 	@Override
-	public void update(Observable arg0, Object arg1) {
-		
+	public void update(Observable o, Object arg) {
+		//this.println(arg);
+		//writer.println(arg);
+		//this.flush();
+		//writer.flush();
+		try {
+			writeObject(o);
+			} 
+		catch (IOException e) {
+			e.printStackTrace();
+			}
 	}
 
 }
