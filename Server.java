@@ -1,17 +1,12 @@
 package server;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.ObjectInputStream;
 import java.io.Reader;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Observable;
-import java.util.Observer;
-
 import com.google.gson.Gson;
 
 /*
@@ -25,7 +20,7 @@ import com.google.gson.Gson;
 public class Server extends Observable {
 
     static Server server;
-    private Item[] auctions;
+    public Item[] auctions;
     
     public static void main (String [] args) {
         server = new Server();
@@ -44,43 +39,26 @@ public class Server extends Observable {
 		}
 	}
 
+    
 	private void SetupNetworking() {
         try {
         	System.out.println("Server Started");
-            ServerSocket ss = new ServerSocket(6969);
+            @SuppressWarnings("resource")
+			ServerSocket ss = new ServerSocket(6969);
             while (true) {
                 Socket clientSocket = ss.accept();
-                ClientObserver writer = new ClientObserver(clientSocket.getOutputStream());
-                Thread t = new Thread(new ClientHandler(clientSocket, writer));
+                ClientHandler handler = new ClientHandler(this, clientSocket);
+                this.addObserver(handler);
+                Thread t = new Thread(handler);
                 t.start();
-                addObserver((Observer) writer);
                 System.out.println("got a connection");
             }
         } catch (IOException e) {}
     }
-
-    class ClientHandler implements Runnable {
-        private  ObjectInputStream reader;
-        private  ClientObserver writer; // See Canvas. Extends ObjectOutputStream, implements Observer
-        Socket clientSocket;
-
-        public ClientHandler(Socket clientSocket, ClientObserver writer) {
-			this.writer = writer;
-			this.clientSocket = clientSocket;
-        }
-
-        public void run() {
-        	try {
-				DataInputStream inputFromClient = new DataInputStream(clientSocket.getInputStream());
-				DataOutputStream outputToClient = new DataOutputStream(clientSocket.getOutputStream());
-				while(true) {
-					String message = "placeholder";
-					//System.out.println("message recieved: " + message);
-					//outputToClient.writeUTF("Message recieved: " + message);
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-        }
-    }
+	
+	public Item[] getAuctions() {
+		return auctions;
+	}
 }
+
+	

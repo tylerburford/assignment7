@@ -32,25 +32,33 @@ import javafx.stage.Stage;
  */
 
 public class Bidder extends Application { 
+	
+	//Data
+	public Item[] auctions;
+	
 	// I/O streams 
-	PrintWriter toServer; 
-	BufferedReader fromServer;
+	public PrintWriter toServer; 
+	public BufferedReader fromServer;
+	public Gson gson;
+	
+	//JavaFX
 	Stage stage;
 	Scene scene;
 	FXMLLoader loader = new FXMLLoader(getClass().getResource("ClientFX.fxml"));
 	@FXML Button button;
+	@FXML Button quit;
 	@FXML TextField tf;
 	@FXML TextArea ta;
 	
 	public static void main(String[] args) {
 		launch(args);
 	}
-	
+	 
 	@Override
 	public void start(Stage primaryStage) throws Exception { 
 		Parent root = loader.load();
-		stage = primaryStage;
-        scene = new Scene(root, 1361, 826);
+		stage = primaryStage; 
+        scene = new Scene(root, 1361, 826); 
         primaryStage.setTitle("Testing FXML");
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -58,18 +66,26 @@ public class Bidder extends Application {
 			@SuppressWarnings("resource")
 			Socket socket = new Socket("localhost", 6969); 
 			fromServer = new BufferedReader((new InputStreamReader(socket.getInputStream()))); 
-			toServer = new PrintWriter(socket.getOutputStream()); 
-		} 
-		catch (IOException ex) { 
-			ex.printStackTrace();
-		}
+			toServer = new PrintWriter(socket.getOutputStream());
+			}catch (IOException ex) { ex.printStackTrace();}
+		gson = new Gson();
+		Reader reader  = new Reader(this, fromServer);
+		Thread readerThread = new Thread(reader);
+		readerThread.start();
+		System.out.println("asfds");
 	}
 	
+	
+		
 	
 	public void buttonPressed(javafx.event.ActionEvent e) {
 	}
 	public void TextEntered(javafx.event.ActionEvent e) {
 	
+	}
+	
+	public void quit(javafx.event.ActionEvent e) {
+		System.exit(0);
 	}
 }
 
