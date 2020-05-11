@@ -1,3 +1,11 @@
+/*
+ *  EE422C Final Project submission by
+ *  Tyler Burford
+ *  tlb3565
+ *  16315
+ *  Spring 2020
+ */
+
 package final_exam;
 
 import java.io.BufferedReader;

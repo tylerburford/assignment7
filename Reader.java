@@ -1,3 +1,11 @@
+/*
+ *  EE422C Final Project submission by
+ *  Tyler Burford
+ *  tlb3565
+ *  16315
+ *  Spring 2020
+ */
+
 package final_exam;
 
 import java.io.BufferedReader;
@@ -12,10 +20,10 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
 public class Reader implements Runnable {
-	Bidder bidder;
+	Client bidder;
 	BufferedReader fromServer;
 
-	public Reader(Bidder client, BufferedReader input) {
+	public Reader(Client client, BufferedReader input) {
 		bidder = client;
 		fromServer = input;
 	} 
