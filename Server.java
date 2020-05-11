@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Observable;
 import com.google.gson.Gson;
 
@@ -21,6 +22,7 @@ public class Server extends Observable {
 
     static Server server;
     public Item[] auctions;
+    public ArrayList<String> customers = new ArrayList<String>();
     
     public static void main (String [] args) {
         server = new Server();
@@ -33,7 +35,7 @@ public class Server extends Observable {
     	try {
 			Reader reader = new FileReader("C:\\Users\\tburf\\eclipse-workspace\\Server\\src\\server\\auctions.json");
 			auctions = gson.fromJson(reader, Item[].class);
-			System.out.println(auctions);
+			//System.out.println(auctions);
 		} catch (FileNotFoundException e) {
 			System.out.println("File not found! D:");
 		}
@@ -56,20 +58,28 @@ public class Server extends Observable {
         }catch (IOException e) {}
 	}
 	
-	public void process(String message){
-		int separatorIndex = message.indexOf("+");
-		String itemName = message.substring(0, separatorIndex);
-		Double bid = Double.valueOf(message.substring(separatorIndex));
-		System.out.println("item Name: " + itemName + ", bid: "+ bid);
+	public void removeClient(ClientHandler handler) {
+		this.deleteObserver(handler);
+	}
+	
+	public void processBid(String message){
+		String msgArr[] = message.split("\\+");
+		String user = msgArr[0];
+		String itemName = msgArr[1];
+		Double bid = Double.valueOf(msgArr[2]);
+		System.out.println("user: " + user + " item Name: " + itemName + " bid: "+ bid);
+		
 		for(int i=0; i<auctions.length; i++) {
 			if(auctions[i].name.equals(itemName)){
-				if(bid > auctions[i].sellPrice) {
-					auctions[i].sold = true;
-					notifyObservers();
+				if(bid >= auctions[i].sellPrice) {
+					auctions[i].bidPrice = bid;
+					this.setChanged(); //not sure if this is needed
+					this.notifyObservers("buy: " + user + "|" + bid + "|" + itemName);
 				}
 				else if(bid > auctions[i].bidPrice) {
 					auctions[i].bidPrice = bid;
-					notifyObservers();
+					this.setChanged();
+					this.notifyObservers("bid: " + user + "|" + bid + "|" + itemName);
 				}
 			}
 		}

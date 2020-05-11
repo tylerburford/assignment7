@@ -36,14 +36,31 @@ class ClientHandler implements Observer, Runnable {
     	try {
 			while((message = fromClient.readLine()) != null) {
 				System.out.println("From client: " + message);
-				server.process(message);
+				String split = " ";
+				String msgArr[] = message.split(split);
+				message = message.replaceFirst(msgArr[0], "");
+				message = message.replaceFirst(" ", ""); //get rid of leading space
+				//System.out.println("new String:" + message);
+				if(msgArr[0].equals("username:"))
+					tryUsername(message);
+				else if(msgArr[0].equals("bid:"))
+					server.processBid(message);
+				else if(msgArr[0].equals("quit")) {
+					System.out.println("removing client");
+					toClient.println("quit");
+					toClient.flush();
+					server.removeClient(this);
+				}
+				else
+					System.out.println("invalid command");
 			}
     	}catch (IOException e){e.printStackTrace();}
     }
 
 	@Override
 	public void update(Observable arg0, Object arg1) {
-		toClient.println((String) arg1);		
+		toClient.println((String) arg1);
+		toClient.flush();
 	}
 	
 	public void initializeClientServer() {
@@ -52,6 +69,23 @@ class ClientHandler implements Observer, Runnable {
 		toClient.flush();
 	}
 	
+	public void tryUsername(String userName) {
+		boolean sameNames = false;
+		for(int i=0; i<server.customers.size(); i++) {
+			if(server.customers.get(i).equals(userName))
+				sameNames = true;
+		}
+		if(sameNames == false) {
+			server.customers.add(userName);
+			toClient.println("username: success");
+			toClient.flush();
+		}
+		else if(sameNames == true) {
+			toClient.println("username: fail");
+			toClient.flush();
+		}
+		
+	}
 	
 	public void clientBid() {
 		

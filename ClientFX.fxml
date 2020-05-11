@@ -5,33 +5,34 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="471.0" prefWidth="739.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="859.0" prefWidth="744.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <ChoiceBox fx:id="itemChooser" layoutX="350.0" layoutY="400.0" prefWidth="150.0" />
-      <Button fx:id="bidButton" layoutX="591.0" layoutY="374.0" mnemonicParsing="false" onAction="#bid" prefHeight="70.0" prefWidth="120.0" text="BID!">
+      <ChoiceBox fx:id="itemChooser" disable="true" layoutX="350.0" layoutY="400.0" prefWidth="150.0" />
+      <Button fx:id="bidButton" disable="true" layoutX="591.0" layoutY="374.0" mnemonicParsing="false" onAction="#bid" prefHeight="70.0" prefWidth="120.0" text="BID!">
          <font>
             <Font name="Berlin Sans FB" size="29.0" />
          </font></Button>
       <Button fx:id="quit" layoutX="527.0" layoutY="397.0" mnemonicParsing="false" onAction="#quit" text="Quit" />
-      <ScrollPane layoutX="14.0" layoutY="14.0" prefHeight="343.0" prefWidth="716.0">
+      <ScrollPane layoutX="14.0" layoutY="23.0" prefHeight="343.0" prefWidth="716.0">
         <content>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="590.0" prefWidth="701.0">
                <children>
-                  <Label fx:id="auction1" layoutX="132.0" layoutY="14.0" prefHeight="25.0" prefWidth="120.0" text="Name1" />
-                  <Label fx:id="auction2" layoutX="132.0" layoutY="138.0" prefHeight="17.0" prefWidth="141.0" text="Name2" />
-                  <Label fx:id="auction3" layoutX="132.0" layoutY="255.0" prefHeight="17.0" prefWidth="126.0" text="Name3" />
-                  <Label fx:id="auction4" layoutX="124.0" layoutY="352.0" prefHeight="17.0" prefWidth="137.0" text="Name4" />
-                  <Label fx:id="auction5" layoutX="111.0" layoutY="471.0" prefHeight="17.0" prefWidth="120.0" text="Name5" />
-                  <Label fx:id="description1" layoutX="132.0" layoutY="40.0" prefHeight="62.0" prefWidth="235.0" text="Desc1" wrapText="true" />
-                  <Label fx:id="description2" layoutX="131.0" layoutY="161.0" prefHeight="70.0" prefWidth="246.0" text="Desc2" wrapText="true" />
-                  <Label fx:id="description3" layoutX="131.0" layoutY="272.0" prefHeight="63.0" prefWidth="190.0" text="Desc3" wrapText="true" />
-                  <Label fx:id="description4" layoutX="119.0" layoutY="363.0" prefHeight="91.0" prefWidth="168.0" text="Desc4" wrapText="true" />
-                  <Label fx:id="description5" layoutX="111.0" layoutY="488.0" prefHeight="100.0" prefWidth="231.0" text="Desc5" wrapText="true" />
+                  <Label fx:id="auction1" layoutX="130.0" layoutY="14.0" prefHeight="25.0" prefWidth="120.0" text="Name1" />
+                  <Label fx:id="auction2" layoutX="130.0" layoutY="138.0" prefHeight="17.0" prefWidth="141.0" text="Name2" />
+                  <Label fx:id="auction3" layoutX="130.0" layoutY="255.0" prefHeight="17.0" prefWidth="126.0" text="Name3" />
+                  <Label fx:id="auction4" layoutX="130.0" layoutY="352.0" prefHeight="17.0" prefWidth="137.0" text="Name4" />
+                  <Label fx:id="auction5" layoutX="130.0" layoutY="471.0" prefHeight="17.0" prefWidth="120.0" text="Name5" />
+                  <Label fx:id="description1" layoutX="130.0" layoutY="49.0" prefHeight="60.0" prefWidth="150.0" text="Desc1" wrapText="true" />
+                  <Label fx:id="description2" layoutX="130.0" layoutY="161.0" prefHeight="60.0" prefWidth="150.0" text="Desc2" wrapText="true" />
+                  <Label fx:id="description3" layoutX="130.0" layoutY="272.0" prefHeight="60.0" prefWidth="150.0" text="Desc3" wrapText="true" />
+                  <Label fx:id="description4" layoutX="130.0" layoutY="363.0" prefHeight="60.0" prefWidth="150.0" text="Desc4" wrapText="true" />
+                  <Label fx:id="description5" layoutX="130.0" layoutY="488.0" prefHeight="60.0" prefWidth="150.0" text="Desc5" wrapText="true" />
                   <Text layoutX="450.0" layoutY="31.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Current Bid:" wrappingWidth="67.4375" />
                   <Text layoutX="450.0" layoutY="151.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Current Bid:" wrappingWidth="67.4375" />
                   <Text layoutX="450.0" layoutY="268.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Current Bid:" wrappingWidth="67.4375" />
@@ -42,25 +43,54 @@
                   <Separator layoutX="-19.0" layoutY="224.0" prefHeight="14.0" prefWidth="706.0" />
                   <Separator layoutX="-19.0" layoutY="441.0" prefHeight="14.0" prefWidth="706.0" />
                   <Separator layoutX="-2.0" layoutY="557.0" prefHeight="14.0" prefWidth="706.0" />
-                  <Label fx:id="bidPrice1" layoutX="519.0" layoutY="18.0" text="bidPrice1" />
-                  <Label fx:id="bidPrice2" layoutX="519.0" layoutY="138.0" text="bidPrice2" />
-                  <Label fx:id="bidPrice3" layoutX="519.0" layoutY="255.0" text="bidPrice3" />
+                  <Label fx:id="bidPrice1" layoutX="520.0" layoutY="18.0" text="bidPrice1" />
+                  <Label fx:id="bidPrice2" layoutX="520.0" layoutY="138.0" text="bidPrice2" />
+                  <Label fx:id="bidPrice3" layoutX="520.0" layoutY="255.0" text="bidPrice3" />
                   <Label fx:id="bidPrice4" layoutX="515.0" layoutY="361.0" text="bidPrice4" />
                   <Label fx:id="bidPrice5" layoutX="519.0" layoutY="488.0" text="bidPrice5" />
                   <Text layoutX="450.0" layoutY="76.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Buy it Now!:" />
-                  <Text layoutX="452.0" layoutY="201.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Buy it Now!:" />
-                  <Text layoutX="452.0" layoutY="312.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Buy it Now!:" />
-                  <Text layoutX="448.0" layoutY="421.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Buy it Now!:" />
-                  <Text layoutX="452.0" layoutY="524.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Buy it Now!:" />
-                  <Label fx:id="buyPrice1" layoutX="518.0" layoutY="63.0" text="buyPrice1" />
-                  <Label fx:id="buyPrice2" layoutX="518.0" layoutY="188.0" text="buyPrice2" />
-                  <Label fx:id="buyPrice3" layoutX="518.0" layoutY="299.0" text="buyPrice3" />
-                  <Label fx:id="buyPrice4" layoutX="512.0" layoutY="408.0" text="buyPrice4" />
-                  <Label fx:id="buyPrice5" layoutX="518.0" layoutY="511.0" text="buyPrice5" />
+                  <Text layoutX="450.0" layoutY="201.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Buy it Now!:" />
+                  <Text layoutX="450.0" layoutY="312.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Buy it Now!:" />
+                  <Text layoutX="450.0" layoutY="421.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Buy it Now!:" />
+                  <Text layoutX="450.0" layoutY="524.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Buy it Now!:" />
+                  <Label fx:id="buyPrice1" layoutX="520.0" layoutY="63.0" text="buyPrice1" />
+                  <Label fx:id="buyPrice2" layoutX="520.0" layoutY="188.0" text="buyPrice2" />
+                  <Label fx:id="buyPrice3" layoutX="520.0" layoutY="299.0" text="buyPrice3" />
+                  <Label fx:id="buyPrice4" layoutX="520.0" layoutY="408.0" text="buyPrice4" />
+                  <Label fx:id="buyPrice5" layoutX="520.0" layoutY="511.0" text="buyPrice5" />
+                  <Text fx:id="itemSold1" fill="#369a24" layoutX="590.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SOLD!" underline="true" visible="false">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="itemSold2" fill="#369a24" layoutX="590.0" layoutY="185.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SOLD!" underline="true" visible="false">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="itemSold3" fill="#369a24" layoutX="590.0" layoutY="294.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SOLD!" underline="true" visible="false">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="itemSold4" fill="#369a24" layoutX="590.0" layoutY="416.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SOLD!" underline="true" visible="false">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="itemSold5" fill="#369a24" layoutX="590.0" layoutY="518.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SOLD!" underline="true" visible="false">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                  </Text>
                </children>
             </AnchorPane>
         </content>
       </ScrollPane>
-      <TextField fx:id="userBid" layoutX="250.0" layoutY="400.0" onAction="#bidEntered" prefHeight="25.0" prefWidth="67.0" promptText="Enter Bid" />
+      <TextArea fx:id="serverConsole" editable="false" layoutX="34.0" layoutY="588.0" prefHeight="200.0" prefWidth="650.0" wrapText="true" />
+      <TextField fx:id="userBid" disable="true" layoutX="250.0" layoutY="400.0" prefHeight="25.0" prefWidth="67.0" promptText="Enter Bid" />
+      <Button fx:id="logIn" layoutX="290.0" layoutY="500.0" mnemonicParsing="false" onAction="#logIn" text="Log in" />
+      <TextField fx:id="userName" layoutX="120.0" layoutY="500.0" promptText="Enter a username" />
+      <Text layoutX="25.0" layoutY="515.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Your username:" />
    </children>
 </AnchorPane>

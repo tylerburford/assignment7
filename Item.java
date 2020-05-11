@@ -1,6 +1,7 @@
 package server;
 
 public class Item {
+	String highestBidder;
 	Boolean sold;
 	String name;
 	String description;
@@ -8,7 +9,6 @@ public class Item {
 	double sellPrice;
 	
 	public Item(String name, String description, double bidPrice, double sellPrice) {
-		this.sold = false;
 		this.name = name;
 		this.description = description;
 		this.bidPrice = bidPrice;

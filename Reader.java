@@ -21,21 +21,53 @@ public class Reader implements Runnable {
 		System.out.println("Starting reader thread");
 		GsonBuilder builder = new GsonBuilder();
 		Gson gson = builder.create(); 
-		String input;
-		
+		String input;	
 		//Initialize auction house
 		try {
 			input = fromServer.readLine();
 			bidder.auctions = gson.fromJson(input, Item[].class);
-			System.out.println("getting a message: " + input);
-			System.out.println(bidder.auctions);
 		} catch (IOException e) {e.printStackTrace();}
-		
 		bidder.setUpAuctions();
 		
-		try {
+		try{
 			while((input = fromServer.readLine()) != null) {
-				System.out.println(input);
+				//input processing
+				System.out.println("From Server:" + input);
+				String split = " ";
+				String msgArr[] = input.split(split);
+				input = input.replaceFirst(msgArr[0], "");
+				String command = msgArr[0];
+				//
+				
+				if(command.equals("username:")) {
+					if(input.equals(" success"))
+						bidder.loginSuccess();
+					else if(input.equals(" fail"))
+						bidder.serverConsole.setText(bidder.serverConsole.getText() + " \nThat username has already been taken. \n");
+				}
+				else if(command.equals("bid:")) {
+					String inputArr[] = input.split("\\|");
+					String user = inputArr[0];
+					Double bid = Double.valueOf(inputArr[1]);
+					String itemName = inputArr[2];
+					bidder.updateAuctions(itemName, bid);
+					bidder.serverConsole.setText(bidder.serverConsole.getText() + user + " bids $" + bid + " for " + itemName + "\n");
+				}
+				else if(command.equals("buy:")) {
+					String inputArr[] = input.split("\\|");
+					String user = inputArr[0];
+					Double bid = Double.valueOf(inputArr[1]);
+					String itemName = inputArr[2];
+					bidder.itemSold(itemName);
+					
+					bidder.serverConsole.setText(bidder.serverConsole.getText() + user + " bought " + itemName + " for $" + bid + "!\n");
+				}
+				else if(command.equals("quit")) {
+					fromServer.close();
+					bidder.exit();
+				}
+				
+				//bidder.updateAuctions(input);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

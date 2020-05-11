@@ -8,28 +8,28 @@
 
 	{
 		"name": "Stealth Bomber",
-		"description": "An increible artifact of the Cold War, this B-52 stealth bomber flew over 100 missions!",
-			"bidPrice": 3.00,
+		"description": "An incredible artifact of the Cold War, this B-52 stealth bomber flew over 100 missions!",
+		"bidPrice": 3.55,
 		"sellPrice": 250000000
 	},
 
 	{
 		"name": "10 Dollars ",
 		"description": "10 American USD, circa 2013, legal tender for all debts, public and private",
-		"bidPrice": 15.00,
+		"bidPrice": 15.01,
 		"sellPrice": 20.00
 	},
 	
 	{
-		"name": "Chucky's favorite knife",
-		"description": "Everyone stay on the lookout for a creepy doll...",
+		"name": "Some old painting",
+		"description": "No, nobody famous made this",
 		"bidPrice": 50.00,
 		"sellPrice": 100.00
 	},
 
 	{
 		"name": "A shopping basket",
-		"description": "bruh",
+		"description": "Kroger collectable!",
 		"bidPrice": 25.00,
 		"sellPrice": 40.00
 	}
