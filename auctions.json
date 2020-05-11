@@ -1,36 +1,51 @@
 [
 	{
 		"name": "Stuffed Bear",
-		"description": "A fluffy stuffed bear for kids",
+		"description": "A fluffy stuffed bear for kids. Or adults, idc what you do with your life.",
 		"bidPrice": 10.00,
-		"sellPrice": 25.00
+		"sellPrice": 25.00,
+		"sold": false,
+		"time": 15,
+		"highestBidder": null
 	},
 
 	{
 		"name": "Stealth Bomber",
 		"description": "An incredible artifact of the Cold War, this B-52 stealth bomber flew over 100 missions!",
 		"bidPrice": 3.55,
-		"sellPrice": 250000000
+		"sellPrice": 250000000,
+		"sold": false,
+		"time": 30,
+		"highestBidder": null
 	},
 
 	{
 		"name": "10 Dollars ",
-		"description": "10 American USD, circa 2013, legal tender for all debts, public and private",
+		"description": "10 American USD, circa 2013, legal tender for all debts, public and private.",
 		"bidPrice": 15.01,
-		"sellPrice": 20.00
+		"sellPrice": 20.00,
+		"sold": false,
+		"time": 45,
+		"highestBidder": null
 	},
 	
 	{
 		"name": "Some old painting",
-		"description": "No, nobody famous made this",
+		"description": "No, nobody famous made this.",
 		"bidPrice": 50.00,
-		"sellPrice": 100.00
+		"sellPrice": 100.00,
+		"sold": false,
+		"time": 60,
+		"highestBidder": null
 	},
 
 	{
 		"name": "A shopping basket",
 		"description": "Kroger collectable!",
 		"bidPrice": 25.00,
-		"sellPrice": 40.00
+		"sellPrice": 40.00,
+		"sold": false,
+		"time": 100,
+		"highestBidder": null
 	}
 ]

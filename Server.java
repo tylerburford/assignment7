@@ -35,13 +35,31 @@ public class Server extends Observable {
     	try {
 			Reader reader = new FileReader("C:\\Users\\tburf\\eclipse-workspace\\Server\\src\\server\\auctions.json");
 			auctions = gson.fromJson(reader, Item[].class);
-			//System.out.println(auctions);
 		} catch (FileNotFoundException e) {
 			System.out.println("File not found! D:");
 		}
+    	startTimers();
 	}
 
     
+	private void startTimers() {
+		Thread timerDecrement = new Thread() {
+			public void run() {
+				while(auctions[4].time > 0) {
+					for(int i=0; i<auctions.length; i++)
+						if(auctions[i].time > 0)
+							auctions[i].time--;
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						System.out.println("Something happened while decrementing Auction timers");
+					}
+				}
+			}
+		};
+		timerDecrement.start();
+	}
+
 	private void SetupNetworking() {
         try {
         	System.out.println("Server Started");
@@ -72,12 +90,15 @@ public class Server extends Observable {
 		for(int i=0; i<auctions.length; i++) {
 			if(auctions[i].name.equals(itemName)){
 				if(bid >= auctions[i].sellPrice) {
+					auctions[i].sold = true;
+					auctions[i].highestBidder = user;
 					auctions[i].bidPrice = bid;
 					this.setChanged(); //not sure if this is needed
 					this.notifyObservers("buy: " + user + "|" + bid + "|" + itemName);
 				}
 				else if(bid > auctions[i].bidPrice) {
 					auctions[i].bidPrice = bid;
+					auctions[i].highestBidder = user;
 					this.setChanged();
 					this.notifyObservers("bid: " + user + "|" + bid + "|" + itemName);
 				}

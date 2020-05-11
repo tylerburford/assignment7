@@ -43,14 +43,14 @@ public class Reader implements Runnable {
 					if(input.equals(" success"))
 						bidder.loginSuccess();
 					else if(input.equals(" fail"))
-						bidder.serverConsole.setText(bidder.serverConsole.getText() + " \nThat username has already been taken. \n");
+						bidder.serverConsole.setText(bidder.serverConsole.getText() + "That username has already been taken. \n");
 				}
 				else if(command.equals("bid:")) {
 					String inputArr[] = input.split("\\|");
 					String user = inputArr[0];
 					Double bid = Double.valueOf(inputArr[1]);
 					String itemName = inputArr[2];
-					bidder.updateAuctions(itemName, bid);
+					bidder.updateAuctions(itemName, user, bid);
 					bidder.serverConsole.setText(bidder.serverConsole.getText() + user + " bids $" + bid + " for " + itemName + "\n");
 				}
 				else if(command.equals("buy:")) {
@@ -59,15 +59,12 @@ public class Reader implements Runnable {
 					Double bid = Double.valueOf(inputArr[1]);
 					String itemName = inputArr[2];
 					bidder.itemSold(itemName);
-					
 					bidder.serverConsole.setText(bidder.serverConsole.getText() + user + " bought " + itemName + " for $" + bid + "!\n");
 				}
 				else if(command.equals("quit")) {
 					fromServer.close();
 					bidder.exit();
 				}
-				
-				//bidder.updateAuctions(input);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

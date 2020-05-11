@@ -45,10 +45,11 @@ class ClientHandler implements Observer, Runnable {
 					tryUsername(message);
 				else if(msgArr[0].equals("bid:"))
 					server.processBid(message);
-				else if(msgArr[0].equals("quit")) {
+				else if(msgArr[0].equals("quit:")) {
 					System.out.println("removing client");
 					toClient.println("quit");
 					toClient.flush();
+					server.customers.remove(message);
 					server.removeClient(this);
 				}
 				else

@@ -5,12 +5,20 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import com.google.gson.Gson;
+
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -21,6 +29,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 /*
  * Author: Vallath Nandakumar and EE 422C instructors
@@ -45,6 +54,11 @@ public class Bidder extends Application {
 	Stage stage;
 	Scene scene;
 	FXMLLoader loader = new FXMLLoader(getClass().getResource("ClientFX.fxml"));
+	@FXML Timeline timeline1;
+	@FXML Timeline timeline2;
+	@FXML Timeline timeline3;
+	@FXML Timeline timeline4;
+	@FXML Timeline timeline5;
 	@FXML DialogPane login;
 	@FXML Button logIn;
 	@FXML Button bidButton;
@@ -52,6 +66,11 @@ public class Bidder extends Application {
 	@FXML TextField userName;
 	@FXML TextField userBid;
 	@FXML TextArea serverConsole = new TextArea();
+	@FXML Label itemTimer1;
+	@FXML Label itemTimer2;
+	@FXML Label itemTimer3;
+	@FXML Label itemTimer4;
+	@FXML Label itemTimer5;
 	@FXML Label usernameLabel;
 	@FXML Label auction1;
 	@FXML Label auction2;
@@ -117,26 +136,115 @@ public class Bidder extends Application {
 						description1.setText(auctions[0].description);
 						bidPrice1.setText("$" + String.valueOf(auctions[0].bidPrice));
 						buyPrice1.setText("$" + String.valueOf(auctions[0].sellPrice));
+						if(auctions[0].sold == true)
+							itemSold1.setVisible(true);
 						
 						auction2.setText(auctions[1].name);
 						description2.setText(auctions[1].description);
 						bidPrice2.setText("$" + String.valueOf(auctions[1].bidPrice));
 						buyPrice2.setText("$" + String.valueOf(auctions[1].sellPrice));
+						if(auctions[1].sold == true)
+							itemSold2.setVisible(true);
 						
 						auction3.setText(auctions[2].name);
 						description3.setText(auctions[2].description);
 						bidPrice3.setText("$" + String.valueOf(auctions[2].bidPrice));
 						buyPrice3.setText("$" + String.valueOf(auctions[2].sellPrice));
+						if(auctions[2].sold == true)
+							itemSold3.setVisible(true);
 						
 						auction4.setText(auctions[3].name);
 						description4.setText(auctions[3].description);
 						bidPrice4.setText("$" + String.valueOf(auctions[3].bidPrice));
 						buyPrice4.setText("$" + String.valueOf(auctions[3].sellPrice));
+						if(auctions[3].sold == true)
+							itemSold4.setVisible(true);
 						
 						auction5.setText(auctions[4].name);		
 						description5.setText(auctions[4].description);
 						bidPrice5.setText("$" + String.valueOf(auctions[4].bidPrice));
 						buyPrice5.setText("$" + String.valueOf(auctions[4].sellPrice));
+						if(auctions[4].sold == true)
+							itemSold5.setVisible(true);
+						
+						//Setting up Countdown Clocks
+						Timer timer = new Timer();
+						TimerTask timer1Task = new TimerTask () {
+							public void run() {
+								serverConsole.setText(serverConsole.getText() + "Bidding for " + auctions[0].name + " has ended. \n");
+								timerEnded(auctions[0]);
+							}
+						};
+						TimerTask timer2Task = new TimerTask () {
+							public void run() {
+								serverConsole.setText(serverConsole.getText() + "Bidding for " + auctions[1].name + " has ended. \n");
+								timerEnded(auctions[1]);
+							}
+						};
+						TimerTask timer3Task = new TimerTask () {
+							public void run() {
+								serverConsole.setText(serverConsole.getText() + "Bidding for " + auctions[2].name + " has ended. \n");
+								timerEnded(auctions[2]);
+							}
+						};
+						TimerTask timer4Task = new TimerTask () {
+							public void run() {
+								serverConsole.setText(serverConsole.getText() + "Bidding for " + auctions[3].name + " has ended. \n");
+								timerEnded(auctions[3]);
+							}
+						};
+						TimerTask timer5Task = new TimerTask () {
+							public void run() {
+								serverConsole.setText(serverConsole.getText() + "Bidding for " + auctions[4].name + " has ended. \n");
+								timerEnded(auctions[4]);
+							}
+						};
+						timer.schedule(timer1Task, (auctions[0].time)*1000l);
+						timer.schedule(timer2Task, (auctions[1].time)*1000l);
+						timer.schedule(timer3Task, (auctions[2].time)*1000l);
+						timer.schedule(timer4Task, (auctions[3].time)*1000l);
+						timer.schedule(timer5Task, (auctions[4].time)*1000l);
+			
+						itemTimer1.setText(auctions[0].time.toString());
+						itemTimer2.setText(auctions[1].time.toString());
+						itemTimer3.setText(auctions[2].time.toString());
+						itemTimer4.setText(auctions[3].time.toString());
+						itemTimer5.setText(auctions[4].time.toString());
+						IntegerProperty auction1Time = new SimpleIntegerProperty(auctions[0].time);
+						IntegerProperty auction2Time = new SimpleIntegerProperty(auctions[1].time);
+						IntegerProperty auction3Time = new SimpleIntegerProperty(auctions[2].time);
+						IntegerProperty auction4Time = new SimpleIntegerProperty(auctions[3].time);
+						IntegerProperty auction5Time = new SimpleIntegerProperty(auctions[4].time);
+						itemTimer1.textProperty().bind(auction1Time.asString());
+						itemTimer2.textProperty().bind(auction2Time.asString());
+						itemTimer3.textProperty().bind(auction3Time.asString());
+						itemTimer4.textProperty().bind(auction4Time.asString());
+						itemTimer5.textProperty().bind(auction5Time.asString());
+						timeline1 = new Timeline();
+						timeline2 = new Timeline();
+						timeline3 = new Timeline();
+						timeline4 = new Timeline();
+						timeline5 = new Timeline();
+				        timeline1.getKeyFrames().add(
+				                new KeyFrame(Duration.seconds(auctions[0].time+1),
+				                new KeyValue(auction1Time, 0)));
+				        timeline1.playFromStart();
+				        timeline2.getKeyFrames().add(
+				                new KeyFrame(Duration.seconds(auctions[1].time+1),
+				                new KeyValue(auction2Time, 0)));
+				        timeline2.playFromStart();
+				        timeline3.getKeyFrames().add(
+				                new KeyFrame(Duration.seconds(auctions[2].time+1),
+				                new KeyValue(auction3Time, 0)));
+				        timeline3.playFromStart();
+				        timeline4.getKeyFrames().add(
+				                new KeyFrame(Duration.seconds(auctions[3].time+1),
+				                new KeyValue(auction4Time, 0)));
+				        timeline4.playFromStart();
+				        timeline5.getKeyFrames().add(
+				                new KeyFrame(Duration.seconds(auctions[4].time+1),
+				                new KeyValue(auction5Time, 0)));
+				        timeline5.playFromStart();
 						
 						for(int i=0; i<auctions.length; i++) {
 							itemChooser.getItems().add(auctions[i].name);
@@ -148,6 +256,57 @@ public class Bidder extends Application {
 			}});
 		thread.start();
 	}
+	
+	public void timerEnded(Item item) {
+			Thread thread = new Thread (new Runnable() {		
+				@Override
+				public void run() {
+					Runnable initializer = new Runnable () {
+						public void run() {
+							for(int i=0; i<auctions.length; i++) {
+								if(auctions[i].equals(item)) {
+									if(i == 0) {
+										itemTimer1.textProperty().unbind();
+										itemTimer1.setText("CLOSED");
+									}
+									else if(i == 1) {
+										itemTimer2.textProperty().unbind();
+										itemTimer2.setText("CLOSED");
+									}
+									else if(i == 2) {
+										itemTimer3.textProperty().unbind();
+										itemTimer3.setText("CLOSED");
+									}
+									else if(i == 3) {
+										itemTimer4.textProperty().unbind();
+										itemTimer4.setText("CLOSED");
+									}
+									else if(i == 4) {
+										itemTimer5.textProperty().unbind();
+										itemTimer5.setText("CLOSED");
+									}
+								}
+							}
+							if(item.sold == false) {
+								if(item.highestBidder != null) {
+									itemSold(item.name);
+									serverConsole.setText(serverConsole.getText() + item.highestBidder + " won the auction for " + item.name + " with a bid of $" + item.bidPrice + "! \n");
+								}
+								else {
+									serverConsole.setText(serverConsole.getText() + "Nobody won the auction for " + item.name + ". \n");
+									itemChooser.getItems().remove(item.name);
+									try {
+										itemChooser.setValue(itemChooser.getItems().get(0));}
+									catch(IndexOutOfBoundsException e) {
+										itemChooser.setDisable(true);
+									}
+								}
+							}
+						}};
+						Platform.runLater(initializer);
+				}});
+			thread.start();
+		}
 	
 	public void updateAuctions() {
 		Thread thread = new Thread (new Runnable() {		
@@ -169,12 +328,37 @@ public class Bidder extends Application {
 	public void bid(javafx.event.ActionEvent e) {
 		String itemname = itemChooser.getValue();
 		String bid = userBid.getText();
-		toServer.println("bid: "+ username + "+" + itemname + "+" + bid);
-		toServer.flush();
+		if(bidIsValid(itemname, bid)) {
+			toServer.println("bid: "+ username + "+" + itemname + "+" + bid);
+			toServer.flush();
+		}else {
+			Thread thread = new Thread (new Runnable() {		
+				@Override
+				public void run() {
+					Runnable initializer = new Runnable () {
+						public void run() {
+							serverConsole.setText(serverConsole.getText() + "Error, bid too low for item: " + itemname + "\n");
+						}};
+				Platform.runLater(initializer);
+				}});
+			thread.start();
+		}
+			
 	}
 	
+	private boolean bidIsValid(String itemname, String userBid) {
+		Double bid = Double.valueOf(userBid);
+		for(int i=0; i<auctions.length; i++) {
+			if(auctions[i].name.equals(itemname)) {
+				if(bid <= auctions[i].bidPrice)
+					return false;
+			}
+		}
+		return true;
+	}
+
 	public void quit(javafx.event.ActionEvent e) {
-		toServer.println("quit");
+		toServer.println("quit: " + username);
 		toServer.flush();
 	}
 	
@@ -196,10 +380,11 @@ public class Bidder extends Application {
 		toServer.flush();
 	}
 
-	public void updateAuctions(String itemName, Double bid) {
+	public void updateAuctions(String itemName, String highBidder, Double bid) {
 		for(int i=0; i<auctions.length; i++) {
 			if(auctions[i].name.equals(itemName)) {
 				auctions[i].bidPrice = bid;
+				auctions[i].highestBidder = highBidder;
 			}
 		}
 		updateAuctions();
@@ -217,6 +402,7 @@ public class Bidder extends Application {
 						userBid.setDisable(false);
 						userName.setDisable(true);
 						logIn.setDisable(true);
+						serverConsole.setText(serverConsole.getText() + "Welcome " + username + "!\n");
 					}};
 					Platform.runLater(initializer);
 			}});
@@ -231,8 +417,10 @@ public class Bidder extends Application {
 					public void run() {
 						int sold = -1;
 						for(int i=0; i<auctions.length; i++) {
-							if(auctions[i].name.equals(itemName))
+							if(auctions[i].name.equals(itemName)) {
 								sold = i;
+								auctions[i].sold = true;
+							}
 						}
 						if(sold != -1) {
 							if(sold == 0)
@@ -247,6 +435,11 @@ public class Bidder extends Application {
 								itemSold5.setVisible(true);
 						}
 						itemChooser.getItems().remove(itemName);
+						try {
+							itemChooser.setValue(itemChooser.getItems().get(0));}
+						catch(IndexOutOfBoundsException e) {
+							itemChooser.setDisable(true);
+						}
 					}};
 			Platform.runLater(initializer);
 			}});
