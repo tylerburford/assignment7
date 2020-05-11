@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.text.DecimalFormat;
+import java.util.Iterator;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -27,6 +29,7 @@ import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -43,6 +46,7 @@ public class Bidder extends Application {
 	//Data
 	public Item[] auctions;
 	String username;
+	DecimalFormat df = new DecimalFormat("#.00");
 	
 	// I/O streams 
 	public Socket socket;
@@ -54,6 +58,7 @@ public class Bidder extends Application {
 	Stage stage;
 	Scene scene;
 	FXMLLoader loader = new FXMLLoader(getClass().getResource("ClientFX.fxml"));
+	@FXML ImageView pic1;
 	@FXML Timeline timeline1;
 	@FXML Timeline timeline2;
 	@FXML Timeline timeline3;
@@ -63,9 +68,11 @@ public class Bidder extends Application {
 	@FXML Button logIn;
 	@FXML Button bidButton;
 	@FXML Button quit;
+	@FXML Button history;
 	@FXML TextField userName;
 	@FXML TextField userBid;
 	@FXML TextArea serverConsole = new TextArea();
+	@FXML TextArea historyField;
 	@FXML Label itemTimer1;
 	@FXML Label itemTimer2;
 	@FXML Label itemTimer3;
@@ -92,12 +99,18 @@ public class Bidder extends Application {
 	@FXML Label buyPrice3;
 	@FXML Label buyPrice4;
 	@FXML Label buyPrice5;
+	@FXML Label winner1;
+	@FXML Label winner2;
+	@FXML Label winner3;
+	@FXML Label winner4;
+	@FXML Label winner5;
 	@FXML Text itemSold1;
 	@FXML Text itemSold2;
 	@FXML Text itemSold3;
 	@FXML Text itemSold4;
 	@FXML Text itemSold5;
 	@FXML ChoiceBox<String> itemChooser;
+	@FXML ChoiceBox<String> historyChooser;
 	
 	
 	public static void main(String[] args) {
@@ -134,68 +147,83 @@ public class Bidder extends Application {
 					public void run() {
 						auction1.setText(auctions[0].name);
 						description1.setText(auctions[0].description);
-						bidPrice1.setText("$" + String.valueOf(auctions[0].bidPrice));
-						buyPrice1.setText("$" + String.valueOf(auctions[0].sellPrice));
-						if(auctions[0].sold == true)
+						bidPrice1.setText("$" + String.valueOf(df.format(auctions[0].bidPrice)));
+						buyPrice1.setText("$" + String.valueOf(df.format(auctions[0].sellPrice)));
+						if(auctions[0].sold == true) {
 							itemSold1.setVisible(true);
-						
+							winner1.setVisible(true);
+							winner1.setText("WINNER: " + auctions[0].highestBidder);
+						}					
 						auction2.setText(auctions[1].name);
 						description2.setText(auctions[1].description);
-						bidPrice2.setText("$" + String.valueOf(auctions[1].bidPrice));
-						buyPrice2.setText("$" + String.valueOf(auctions[1].sellPrice));
-						if(auctions[1].sold == true)
+						bidPrice2.setText("$" + String.valueOf(df.format(auctions[1].bidPrice)));
+						buyPrice2.setText("$" + String.valueOf(df.format(auctions[1].sellPrice)));
+						if(auctions[1].sold == true) {
 							itemSold2.setVisible(true);
-						
+							winner2.setVisible(true);
+							winner2.setText("WINNER: " + auctions[1].highestBidder);
+						}
 						auction3.setText(auctions[2].name);
 						description3.setText(auctions[2].description);
-						bidPrice3.setText("$" + String.valueOf(auctions[2].bidPrice));
-						buyPrice3.setText("$" + String.valueOf(auctions[2].sellPrice));
-						if(auctions[2].sold == true)
+						bidPrice3.setText("$" + String.valueOf(df.format(auctions[2].bidPrice)));
+						buyPrice3.setText("$" + String.valueOf(df.format(auctions[2].sellPrice)));
+						if(auctions[2].sold == true) {
 							itemSold3.setVisible(true);
-						
+							winner3.setVisible(true);
+							winner3.setText("WINNER: " + auctions[2].highestBidder);
+						}
 						auction4.setText(auctions[3].name);
 						description4.setText(auctions[3].description);
-						bidPrice4.setText("$" + String.valueOf(auctions[3].bidPrice));
-						buyPrice4.setText("$" + String.valueOf(auctions[3].sellPrice));
-						if(auctions[3].sold == true)
+						bidPrice4.setText("$" + String.valueOf(df.format(auctions[3].bidPrice)));
+						buyPrice4.setText("$" + String.valueOf(df.format(auctions[3].sellPrice)));
+						if(auctions[3].sold == true) {
 							itemSold4.setVisible(true);
-						
+							winner4.setVisible(true);
+							winner4.setText("WINNER: " + auctions[3].highestBidder);
+						}
 						auction5.setText(auctions[4].name);		
 						description5.setText(auctions[4].description);
-						bidPrice5.setText("$" + String.valueOf(auctions[4].bidPrice));
-						buyPrice5.setText("$" + String.valueOf(auctions[4].sellPrice));
-						if(auctions[4].sold == true)
+						bidPrice5.setText("$" + String.valueOf(df.format(auctions[4].bidPrice)));
+						buyPrice5.setText("$" + String.valueOf(df.format(auctions[4].sellPrice)));
+						if(auctions[4].sold == true) {
+							winner5.setVisible(true);
+							winner5.setText("WINNER: " + auctions[4].highestBidder);
 							itemSold5.setVisible(true);
-						
+						}
 						//Setting up Countdown Clocks
 						Timer timer = new Timer();
 						TimerTask timer1Task = new TimerTask () {
 							public void run() {
-								serverConsole.setText(serverConsole.getText() + "Bidding for " + auctions[0].name + " has ended. \n");
+								if(auctions[0].sold == false) 
+									serverConsole.setText(serverConsole.getText() + "Bidding for " + auctions[0].name + " has ended. \n");
 								timerEnded(auctions[0]);
 							}
 						};
 						TimerTask timer2Task = new TimerTask () {
 							public void run() {
-								serverConsole.setText(serverConsole.getText() + "Bidding for " + auctions[1].name + " has ended. \n");
+								if(auctions[1].sold == false) 
+									serverConsole.setText(serverConsole.getText() + "Bidding for " + auctions[1].name + " has ended. \n");
 								timerEnded(auctions[1]);
 							}
 						};
 						TimerTask timer3Task = new TimerTask () {
 							public void run() {
-								serverConsole.setText(serverConsole.getText() + "Bidding for " + auctions[2].name + " has ended. \n");
+								if(auctions[2].sold == false) 
+									serverConsole.setText(serverConsole.getText() + "Bidding for " + auctions[2].name + " has ended. \n");
 								timerEnded(auctions[2]);
 							}
 						};
 						TimerTask timer4Task = new TimerTask () {
 							public void run() {
-								serverConsole.setText(serverConsole.getText() + "Bidding for " + auctions[3].name + " has ended. \n");
+								if(auctions[3].sold == false) 
+									serverConsole.setText(serverConsole.getText() + "Bidding for " + auctions[3].name + " has ended. \n");
 								timerEnded(auctions[3]);
 							}
 						};
 						TimerTask timer5Task = new TimerTask () {
 							public void run() {
-								serverConsole.setText(serverConsole.getText() + "Bidding for " + auctions[4].name + " has ended. \n");
+								if(auctions[4].sold == false) 
+									serverConsole.setText(serverConsole.getText() + "Bidding for " + auctions[4].name + " has ended. \n");
 								timerEnded(auctions[4]);
 							}
 						};
@@ -247,7 +275,9 @@ public class Bidder extends Application {
 				        timeline5.playFromStart();
 						
 						for(int i=0; i<auctions.length; i++) {
-							itemChooser.getItems().add(auctions[i].name);
+							if(auctions[i].sold == false)
+								itemChooser.getItems().add(auctions[i].name);
+							historyChooser.getItems().add(auctions[i].name);
 						}
 						itemChooser.setValue(auctions[0].name);
 						
@@ -289,8 +319,9 @@ public class Bidder extends Application {
 							}
 							if(item.sold == false) {
 								if(item.highestBidder != null) {
-									itemSold(item.name);
-									serverConsole.setText(serverConsole.getText() + item.highestBidder + " won the auction for " + item.name + " with a bid of $" + item.bidPrice + "! \n");
+									itemSold(item.name, item.highestBidder, item.bidPrice);
+									serverConsole.setText(serverConsole.getText() + item.highestBidder + 
+									" won the auction for " + item.name + " with a bid of $" + item.bidPrice + "! \n");
 								}
 								else {
 									serverConsole.setText(serverConsole.getText() + "Nobody won the auction for " + item.name + ". \n");
@@ -314,11 +345,12 @@ public class Bidder extends Application {
 			public void run() {
 				Runnable initializer = new Runnable () {
 					public void run() {
-						bidPrice1.setText("$" + String.valueOf(auctions[0].bidPrice));
-						bidPrice2.setText("$" + String.valueOf(auctions[1].bidPrice));
-						bidPrice3.setText("$" + String.valueOf(auctions[2].bidPrice));
-						bidPrice4.setText("$" + String.valueOf(auctions[3].bidPrice));
-						bidPrice5.setText("$" + String.valueOf(auctions[4].bidPrice));
+						DecimalFormat df = new DecimalFormat("#.00");
+						bidPrice1.setText("$" + String.valueOf(df.format(auctions[0].bidPrice)));
+						bidPrice2.setText("$" + String.valueOf(df.format(auctions[1].bidPrice)));
+						bidPrice3.setText("$" + String.valueOf(df.format(auctions[2].bidPrice)));
+						bidPrice4.setText("$" + String.valueOf(df.format(auctions[3].bidPrice)));
+						bidPrice5.setText("$" + String.valueOf(df.format(auctions[4].bidPrice)));
 					}};
 			Platform.runLater(initializer);
 			}});
@@ -380,9 +412,40 @@ public class Bidder extends Application {
 		toServer.flush();
 	}
 
+	public void viewHistory(javafx.event.ActionEvent e) {
+		Item item;
+		String itemName = historyChooser.getValue();
+		for(int i=0; i<auctions.length; i++) {
+			if(auctions[i].name.equals(itemName)) {
+				item = auctions[i];
+				showHistory(item);
+			}
+		}
+		
+	}
+
+	public void showHistory(Item item) {
+		Thread thread = new Thread (new Runnable() {		
+			@Override
+			public void run() {
+				Runnable initializer = new Runnable () {
+					public void run() {
+						historyField.clear();
+						Iterator<String> iterator = item.history.iterator();
+						while(iterator.hasNext()) {
+							historyField.setText(historyField.getText() + iterator.next());
+						}
+					}};
+			Platform.runLater(initializer);
+			}});
+		thread.start();
+		
+	}
+
 	public void updateAuctions(String itemName, String highBidder, Double bid) {
 		for(int i=0; i<auctions.length; i++) {
 			if(auctions[i].name.equals(itemName)) {
+				auctions[i].history.add(highBidder + " bids $" + df.format(bid) + " for " + itemName + "\n");
 				auctions[i].bidPrice = bid;
 				auctions[i].highestBidder = highBidder;
 			}
@@ -397,8 +460,10 @@ public class Bidder extends Application {
 			public void run() {
 				Runnable initializer = new Runnable () {
 					public void run() {
+						history.setDisable(false);
 						bidButton.setDisable(false);
 						itemChooser.setDisable(false);
+						historyChooser.setDisable(false);
 						userBid.setDisable(false);
 						userName.setDisable(true);
 						logIn.setDisable(true);
@@ -409,7 +474,7 @@ public class Bidder extends Application {
 		thread.start();
 	}
 
-	public void itemSold(String itemName) {
+	public void itemSold(String itemName, String winner, Double bid) {
 		Thread thread = new Thread (new Runnable() {		
 			@Override
 			public void run() {
@@ -419,26 +484,54 @@ public class Bidder extends Application {
 						for(int i=0; i<auctions.length; i++) {
 							if(auctions[i].name.equals(itemName)) {
 								sold = i;
+								auctions[i].history.add(winner + " bought " + itemName + " for $" + df.format(bid) + "!\n");
 								auctions[i].sold = true;
+								auctions[i].highestBidder = winner;
 							}
 						}
 						if(sold != -1) {
-							if(sold == 0)
+							if(sold == 0) {
+								winner1.setVisible(true);
+								winner1.setText("WINNER: " + auctions[0].highestBidder);
 								itemSold1.setVisible(true);
-							if(sold == 1)
+								itemTimer1.textProperty().unbind();
+								itemTimer1.setText("CLOSED");
+							}
+							if(sold == 1) {
+								winner2.setVisible(true);
+								winner2.setText("WINNER: " + auctions[1].highestBidder);
 								itemSold2.setVisible(true);
-							if(sold == 2)
+								itemTimer2.textProperty().unbind();
+								itemTimer2.setText("CLOSED");
+							}
+							if(sold == 2) {
+								winner3.setVisible(true);
+								winner3.setText("WINNER: " + auctions[2].highestBidder);
 								itemSold3.setVisible(true);
-							if(sold == 3)
+								itemTimer3.textProperty().unbind();
+								itemTimer3.setText("CLOSED");
+							}
+							if(sold == 3) {
+								winner4.setVisible(true);
+								winner4.setText("WINNER: " + auctions[3].highestBidder);
 								itemSold4.setVisible(true);
-							if(sold == 4)
+								itemTimer4.textProperty().unbind();
+								itemTimer4.setText("CLOSED");
+							}
+							if(sold == 4) {
+								winner5.setVisible(true);
+								winner5.setText("WINNER: " + auctions[4].highestBidder);
 								itemSold5.setVisible(true);
+								itemTimer5.textProperty().unbind();
+								itemTimer5.setText("CLOSED");
+							}
 						}
 						itemChooser.getItems().remove(itemName);
 						try {
 							itemChooser.setValue(itemChooser.getItems().get(0));}
 						catch(IndexOutOfBoundsException e) {
 							itemChooser.setDisable(true);
+							bidButton.setDisable(true);
 						}
 					}};
 			Platform.runLater(initializer);

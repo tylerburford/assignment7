@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.Reader;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Observable;
 import com.google.gson.Gson;
@@ -38,6 +39,9 @@ public class Server extends Observable {
 		} catch (FileNotFoundException e) {
 			System.out.println("File not found! D:");
 		}
+    	for(int i=0; i<auctions.length; i++) {
+    		auctions[i].history = new ArrayList<String>();
+    	}
     	startTimers();
 	}
 
@@ -81,6 +85,7 @@ public class Server extends Observable {
 	}
 	
 	public void processBid(String message){
+		DecimalFormat df = new DecimalFormat("#.00");
 		String msgArr[] = message.split("\\+");
 		String user = msgArr[0];
 		String itemName = msgArr[1];
@@ -90,6 +95,7 @@ public class Server extends Observable {
 		for(int i=0; i<auctions.length; i++) {
 			if(auctions[i].name.equals(itemName)){
 				if(bid >= auctions[i].sellPrice) {
+					auctions[i].history.add(user + " bought " + itemName + " for $" + df.format(bid) + "!\n");
 					auctions[i].sold = true;
 					auctions[i].highestBidder = user;
 					auctions[i].bidPrice = bid;
@@ -97,6 +103,7 @@ public class Server extends Observable {
 					this.notifyObservers("buy: " + user + "|" + bid + "|" + itemName);
 				}
 				else if(bid > auctions[i].bidPrice) {
+					auctions[i].history.add(user + " bids $" + df.format(bid) + " for " + itemName + "\n");
 					auctions[i].bidPrice = bid;
 					auctions[i].highestBidder = user;
 					this.setChanged();

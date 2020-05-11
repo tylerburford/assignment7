@@ -35,7 +35,6 @@ class ClientHandler implements Observer, Runnable {
     	String message;
     	try {
 			while((message = fromClient.readLine()) != null) {
-				System.out.println("From client: " + message);
 				String split = " ";
 				String msgArr[] = message.split(split);
 				message = message.replaceFirst(msgArr[0], "");
@@ -85,17 +84,7 @@ class ClientHandler implements Observer, Runnable {
 			toClient.println("username: fail");
 			toClient.flush();
 		}
-		
 	}
-	
-	public void clientBid() {
-		
-	}
-	
-	public void clientBought(){
-		
-	}
-	
 }
 
 	

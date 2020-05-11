@@ -2,6 +2,8 @@ package client;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.text.DecimalFormat;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -21,7 +23,8 @@ public class Reader implements Runnable {
 		System.out.println("Starting reader thread");
 		GsonBuilder builder = new GsonBuilder();
 		Gson gson = builder.create(); 
-		String input;	
+		String input;
+		DecimalFormat df = new DecimalFormat("#.00");
 		//Initialize auction house
 		try {
 			input = fromServer.readLine();
@@ -36,13 +39,14 @@ public class Reader implements Runnable {
 				String split = " ";
 				String msgArr[] = input.split(split);
 				input = input.replaceFirst(msgArr[0], "");
+				input = input.replaceFirst(" ", ""); //get rid of leading space
 				String command = msgArr[0];
 				//
 				
 				if(command.equals("username:")) {
-					if(input.equals(" success"))
+					if(input.equals("success"))
 						bidder.loginSuccess();
-					else if(input.equals(" fail"))
+					else if(input.equals("fail"))
 						bidder.serverConsole.setText(bidder.serverConsole.getText() + "That username has already been taken. \n");
 				}
 				else if(command.equals("bid:")) {
@@ -51,15 +55,15 @@ public class Reader implements Runnable {
 					Double bid = Double.valueOf(inputArr[1]);
 					String itemName = inputArr[2];
 					bidder.updateAuctions(itemName, user, bid);
-					bidder.serverConsole.setText(bidder.serverConsole.getText() + user + " bids $" + bid + " for " + itemName + "\n");
+					bidder.serverConsole.setText(bidder.serverConsole.getText() + user + " bids $" + df.format(bid) + " for " + itemName + "\n");
 				}
 				else if(command.equals("buy:")) {
 					String inputArr[] = input.split("\\|");
 					String user = inputArr[0];
 					Double bid = Double.valueOf(inputArr[1]);
 					String itemName = inputArr[2];
-					bidder.itemSold(itemName);
-					bidder.serverConsole.setText(bidder.serverConsole.getText() + user + " bought " + itemName + " for $" + bid + "!\n");
+					bidder.itemSold(itemName, user, bid);
+					bidder.serverConsole.setText(bidder.serverConsole.getText() + user + " bought " + itemName + " for $" + df.format(bid) + "!\n");
 				}
 				else if(command.equals("quit")) {
 					fromServer.close();
