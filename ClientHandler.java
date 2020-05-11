@@ -1,4 +1,4 @@
-package server;
+package final_exam;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -140,6 +140,31 @@
                         <Image url="@../ShoppingCart.jpg" />
                      </image>
                   </ImageView>
+                  <Text fx:id="itemUnsold1" fill="#bb2421" layoutX="305.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0" text="UNSOLD" underline="true" visible="false">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="itemUnsold2" fill="#bb2421" layoutX="305.0" layoutY="180.0" strokeType="OUTSIDE" strokeWidth="0.0" text="UNSOLD" underline="true" visible="false">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="itemUnsold3" fill="#bb2421" layoutX="305.0" layoutY="290.0" strokeType="OUTSIDE" strokeWidth="0.0" text="UNSOLD" underline="true" visible="false">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="itemUnsold4" fill="#bb2421" layoutX="305.0" layoutY="400.0" strokeType="OUTSIDE" strokeWidth="0.0" text="UNSOLD" underline="true" visible="false">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                  </Text>
+                  <Text fx:id="itemUnsold5" fill="#bb2421" layoutX="305.0" layoutY="500.0" strokeType="OUTSIDE" strokeWidth="0.0" text="UNSOLD" underline="true" visible="false">
+                     <font>
+                        <Font size="36.0" />
+                     </font>
+                  </Text>
                </children>
             </AnchorPane>
         </content>
@@ -150,8 +175,8 @@
       <Text layoutX="25.0" layoutY="400.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Your username:" />
       <ChoiceBox fx:id="historyChooser" disable="true" layoutX="450.0" layoutY="460.0" prefWidth="150.0" />
       <Button fx:id="history" disable="true" layoutX="605.0" layoutY="460.0" mnemonicParsing="false" onAction="#viewHistory" text="View History" />
-      <TextArea fx:id="serverConsole" editable="false" layoutX="20.0" layoutY="495.0" prefHeight="200.0" prefWidth="347.0" />
-      <TextArea fx:id="historyField" editable="false" layoutX="386.0" layoutY="495.0" prefHeight="200.0" prefWidth="347.0" />
+      <TextArea fx:id="serverConsole" editable="false" layoutX="7.0" layoutY="495.0" prefHeight="210.0" prefWidth="360.0" wrapText="true" />
+      <TextArea fx:id="historyField" editable="false" layoutX="386.0" layoutY="495.0" prefHeight="210.0" prefWidth="360.0" wrapText="true" />
       <Text layoutX="500.0" layoutY="395.0" strokeType="OUTSIDE" strokeWidth="0.0" text="\$">
          <font>
             <Font size="18.0" />

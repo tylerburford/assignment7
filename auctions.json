@@ -5,7 +5,7 @@
 		"bidPrice": 10.00,
 		"sellPrice": 25.00,
 		"sold": false,
-		"time": 100,
+		"time": 30,
 		"highestBidder": null
 	},
 
@@ -15,7 +15,7 @@
 		"bidPrice": 3.55,
 		"sellPrice": 2500,
 		"sold": false,
-		"time": 100,
+		"time": 60,
 		"highestBidder": null
 	},
 
@@ -25,7 +25,7 @@
 		"bidPrice": 15.01,
 		"sellPrice": 20.00,
 		"sold": false,
-		"time": 45,
+		"time": 90,
 		"highestBidder": null
 	},
 	
@@ -35,7 +35,7 @@
 		"bidPrice": 50.00,
 		"sellPrice": 100.00,
 		"sold": false,
-		"time": 30,
+		"time": 120,
 		"highestBidder": null
 	},
 
@@ -45,7 +45,7 @@
 		"bidPrice": 25.00,
 		"sellPrice": 40.00,
 		"sold": false,
-		"time": 100,
+		"time": 150,
 		"highestBidder": null
 	}
 ]

@@ -1,4 +1,4 @@
-package server;
+package final_exam;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -34,7 +34,7 @@ public class Server extends Observable {
     private void populateItems() {
     	Gson gson = new Gson();
     	try {
-			Reader reader = new FileReader("C:\\Users\\tburf\\eclipse-workspace\\Server\\src\\server\\auctions.json");
+			Reader reader = new FileReader("auctions.json");
 			auctions = gson.fromJson(reader, Item[].class);
 		} catch (FileNotFoundException e) {
 			System.out.println("File not found! D:");
@@ -49,7 +49,7 @@ public class Server extends Observable {
 	private void startTimers() {
 		Thread timerDecrement = new Thread() {
 			public void run() {
-				while(auctions[4].time > 0) {
+				while(true) {
 					for(int i=0; i<auctions.length; i++)
 						if(auctions[i].time > 0)
 							auctions[i].time--;
@@ -99,6 +99,7 @@ public class Server extends Observable {
 					auctions[i].sold = true;
 					auctions[i].highestBidder = user;
 					auctions[i].bidPrice = bid;
+					auctions[i].time = 0;
 					this.setChanged(); //not sure if this is needed
 					this.notifyObservers("buy: " + user + "|" + bid + "|" + itemName);
 				}

@@ -1,13 +1,15 @@
-package client;
+package final_exam;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.text.DecimalFormat;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import javafx.application.Platform;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 public class Reader implements Runnable {
 	Bidder bidder;
@@ -25,6 +27,11 @@ public class Reader implements Runnable {
 		Gson gson = builder.create(); 
 		String input;
 		DecimalFormat df = new DecimalFormat("#.00");
+		String awwMP3 = "Aww.mp3";
+		Media Aww = new Media(new File(awwMP3).toURI().toString());
+		MediaPlayer AwwPlayer = new MediaPlayer(Aww);
+		
+		
 		//Initialize auction house
 		try {
 			input = fromServer.readLine();
@@ -46,8 +53,10 @@ public class Reader implements Runnable {
 				if(command.equals("username:")) {
 					if(input.equals("success"))
 						bidder.loginSuccess();
-					else if(input.equals("fail"))
+					else if(input.equals("fail")) {
+						AwwPlayer.play();
 						bidder.serverConsole.setText(bidder.serverConsole.getText() + "That username has already been taken. \n");
+					}
 				}
 				else if(command.equals("bid:")) {
 					String inputArr[] = input.split("\\|");

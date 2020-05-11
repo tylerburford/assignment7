@@ -1,6 +1,7 @@
-package client;
+package final_exam;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -30,6 +31,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -109,6 +112,11 @@ public class Bidder extends Application {
 	@FXML Text itemSold3;
 	@FXML Text itemSold4;
 	@FXML Text itemSold5;
+	@FXML Text itemUnsold1;
+	@FXML Text itemUnsold2;
+	@FXML Text itemUnsold3;
+	@FXML Text itemUnsold4;
+	@FXML Text itemUnsold5;
 	@FXML ChoiceBox<String> itemChooser;
 	@FXML ChoiceBox<String> historyChooser;
 	
@@ -127,7 +135,6 @@ public class Bidder extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
 		try { 
-			@SuppressWarnings("resource")
 			Socket socket = new Socket("localhost", 6969);
 			this.socket = socket;
 			fromServer = new BufferedReader((new InputStreamReader(socket.getInputStream()))); 
@@ -190,6 +197,7 @@ public class Bidder extends Application {
 							winner5.setText("WINNER: " + auctions[4].highestBidder);
 							itemSold5.setVisible(true);
 						}
+						
 						//Setting up Countdown Clocks
 						Timer timer = new Timer();
 						TimerTask timer1Task = new TimerTask () {
@@ -275,12 +283,13 @@ public class Bidder extends Application {
 				        timeline5.playFromStart();
 						
 						for(int i=0; i<auctions.length; i++) {
-							if(auctions[i].sold == false)
+							if(auctions[i].sold == false && auctions[i].time > 0)
 								itemChooser.getItems().add(auctions[i].name);
 							historyChooser.getItems().add(auctions[i].name);
 						}
-						itemChooser.setValue(auctions[0].name);
-						
+						if(!itemChooser.getItems().isEmpty()) {
+							itemChooser.setValue(itemChooser.getItems().get(0));
+						}
 					}};
 			Platform.runLater(initializer);
 			}});
@@ -294,7 +303,7 @@ public class Bidder extends Application {
 					Runnable initializer = new Runnable () {
 						public void run() {
 							for(int i=0; i<auctions.length; i++) {
-								if(auctions[i].equals(item)) {
+								if(auctions[i].equals(item)){
 									if(i == 0) {
 										itemTimer1.textProperty().unbind();
 										itemTimer1.setText("CLOSED");
@@ -317,19 +326,34 @@ public class Bidder extends Application {
 									}
 								}
 							}
-							if(item.sold == false) {
+							if(item.sold == false ) {
 								if(item.highestBidder != null) {
 									itemSold(item.name, item.highestBidder, item.bidPrice);
 									serverConsole.setText(serverConsole.getText() + item.highestBidder + 
 									" won the auction for " + item.name + " with a bid of $" + item.bidPrice + "! \n");
 								}
 								else {
+									for(int i=0; i<auctions.length; i++) {
+										if(auctions[i].equals(item)){
+											if(i == 0)
+												itemUnsold1.setVisible(true);
+											if(i == 1)
+												itemUnsold2.setVisible(true);
+											if(i == 2)
+												itemUnsold3.setVisible(true);
+											if(i == 3)
+												itemUnsold4.setVisible(true);
+											if(i == 4)
+												itemUnsold5.setVisible(true);
+										}
+									}
 									serverConsole.setText(serverConsole.getText() + "Nobody won the auction for " + item.name + ". \n");
 									itemChooser.getItems().remove(item.name);
 									try {
 										itemChooser.setValue(itemChooser.getItems().get(0));}
 									catch(IndexOutOfBoundsException e) {
 										itemChooser.setDisable(true);
+										bidButton.setDisable(true);
 									}
 								}
 							}
@@ -435,6 +459,10 @@ public class Bidder extends Application {
 						while(iterator.hasNext()) {
 							historyField.setText(historyField.getText() + iterator.next());
 						}
+						String checkEmpty = historyField.getText();
+						if(checkEmpty.equals("")) {
+							historyField.setText("Nobody bidded on " + item.name);
+						}
 					}};
 			Platform.runLater(initializer);
 			}});
@@ -460,13 +488,21 @@ public class Bidder extends Application {
 			public void run() {
 				Runnable initializer = new Runnable () {
 					public void run() {
-						history.setDisable(false);
-						bidButton.setDisable(false);
-						itemChooser.setDisable(false);
-						historyChooser.setDisable(false);
-						userBid.setDisable(false);
-						userName.setDisable(true);
+						//add a check to see if any auctions are still ongoing before enabling buttons
+						boolean allAuctionsSoldOrExpired = true;
+						for(int i=0; i<auctions.length; i++) {
+							if(auctions[i].sold == false && auctions[i].time > 0)
+								allAuctionsSoldOrExpired = false;
+						}
+						if(allAuctionsSoldOrExpired == false) {
+							bidButton.setDisable(false);
+							itemChooser.setDisable(false);
+							userBid.setDisable(false);
+							userName.setDisable(true);
+						}
 						logIn.setDisable(true);
+						history.setDisable(false);
+						historyChooser.setDisable(false);
 						serverConsole.setText(serverConsole.getText() + "Welcome " + username + "!\n");
 					}};
 					Platform.runLater(initializer);
@@ -480,6 +516,11 @@ public class Bidder extends Application {
 			public void run() {
 				Runnable initializer = new Runnable () {
 					public void run() {
+						String yayMP3 = "cheering.mp3";
+						Media Yay = new Media(new File(yayMP3).toURI().toString());
+						MediaPlayer YayPlayer = new MediaPlayer(Yay);
+						if(username != null && username.equals(winner))
+							YayPlayer.play();
 						int sold = -1;
 						for(int i=0; i<auctions.length; i++) {
 							if(auctions[i].name.equals(itemName)) {
